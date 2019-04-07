@@ -13,6 +13,7 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
+//  call the getImage() method in the CommentRepository and returns Image
     public Image getImage(Integer imageId) {
         return commentRepository.getImage(imageId);
     }

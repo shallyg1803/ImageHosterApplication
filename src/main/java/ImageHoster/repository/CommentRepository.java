@@ -12,6 +12,10 @@ public class CommentRepository {
     @PersistenceUnit(unitName = "imageHoster")
     private EntityManagerFactory emf;
 
+    //The method creates an instance of EntityManager
+    //Executes JPQL query to fetch the image from the database with corresponding imageId
+    //Returns the image in case the image is found in the database
+    //Returns null if no image is found in the database
     public Image getImage(Integer imageId) {
         EntityManager em = emf.createEntityManager();
         try {
@@ -22,18 +26,6 @@ public class CommentRepository {
         }
     }
 
-//    public void getImageByimageID() {
-//        EntityManager em = emf.createEntityManager();
-//        EntityTransaction transaction = em.getTransaction();
-//
-//        try {
-//            transaction.begin();
-//            //persist() method changes the state of the model object from transient state to persistence state
-//            em.persist(newComment);
-//            transaction.commit();
-//        } catch (Exception e) {
-//            transaction.rollback();
-//        }
-//    }
+
 
 }

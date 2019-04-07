@@ -52,7 +52,7 @@ public class ImageController {
         model.addAttribute("image", image);
         model.addAttribute("tags", image.getTitle());
         model.addAttribute("tags", image.getTags());
-//        model.addAttribute("comments", image.getText());
+//        model.addAttribute("comments", image.getDescription());
         return "images/image";
     }
 
@@ -112,7 +112,7 @@ public class ImageController {
         else{
             String error = "Only the owner of the image can edit the image";
             model.addAttribute("image", image);
-//            model.addAttribute("comments", image.getText());
+//            model.addAttribute("comments", image.getDescription());
             model.addAttribute("editError", error);
             return "images/image";
 

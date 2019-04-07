@@ -38,14 +38,14 @@ public class UserController {
     }
 
     //This controller method is called when the request pattern is of type 'users/registration' and also the incoming request is of POST type
+    //This method the password entered by the user must contain at least 1 alphabet (a-z or A-Z), 1 number (0-9) and 1 special character
+    // (any character other than a-z, A-Z and 0-9). The user must only be registered if the password contains 1 alphabet, 1 number, and 1 special character.
     //This method calls the business logic and after the user record is persisted in the database, directs to login page
     @RequestMapping(value = "users/registration", method = RequestMethod.POST)
     public String registerUser(User user, Model model) {
         String paswd = user.getPassword();
-        System.out.println("*********************************");
         System.out.println(paswd);
-        String pattern = "(^(?=.*[0-9])(?=.*[A-Za-z])(?=.*[@#$%^&+=])(?=\\S+$))";
-//        String pattern = "(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$";
+        String pattern = "(^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{3,}$)";
         System.out.println(paswd.matches(pattern));
         if (paswd.matches(pattern)) {
             userService.registerUser(user);
