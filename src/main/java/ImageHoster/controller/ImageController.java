@@ -97,12 +97,10 @@ public class ImageController {
     @RequestMapping(value = "/editImage")
     public String editImage(@RequestParam("imageId") Integer imageId,HttpSession session, Model model) {
         User user = (User) session.getAttribute("loggeduser");
-        System.out.println(user.getUsername());
         String existingUser = user.getUsername();
         Image image = imageService.getImage(imageId);
         User imageCreater = image.getUser();
         String user1 = imageCreater.getUsername();
-        System.out.println(user1);
         if (existingUser.equals(user1)) {
             String tags = convertTagsToString(image.getTags());
             model.addAttribute("image", image);
@@ -156,11 +154,27 @@ public class ImageController {
 
     //This controller method is called when the request pattern is of type 'deleteImage' and also the incoming request is of DELETE type
     //The method calls the deleteImage() method in the business logic passing the id of the image to be deleted
+    //If owner of the image trying to delete then image will be deleted else error message ‘Only the owner of the image can delete the image’ will print
     //Looks for a controller method with request mapping of type '/images'
     @RequestMapping(value = "/deleteImage", method = RequestMethod.DELETE)
-    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId) {
-        imageService.deleteImage(imageId);
-        return "redirect:/images";
+    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId,HttpSession session, Model model) {
+        User user = (User) session.getAttribute("loggeduser");
+        String existingUser = user.getUsername();
+        Image image = imageService.getImage(imageId);
+        User imageCreater = image.getUser();
+        String user1 = imageCreater.getUsername();
+        if (existingUser.equals(user1)) {
+            imageService.deleteImage(imageId);
+            return "redirect:/images";
+        }
+        else{
+            String error = "Only the owner of the image can delete the image";
+            model.addAttribute("image", image);
+            model.addAttribute("deleteError", error);
+            return "images/image";
+
+
+        }
     }
 
 
