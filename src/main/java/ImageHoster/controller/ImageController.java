@@ -37,8 +37,8 @@ public class ImageController {
     }
 
     //This method is called when the details of the specific image with corresponding title are to be displayed
-    //The logic is to get the image from the databse with corresponding title. After getting the image from the database the details are shown
-    //First receive the dynamic parameter in the incoming request URL in a string variable 'title' and also the Model type object
+    //The logic is to get the image from the databse with corresponding imageId. After getting the image from the database the details are shown
+    //First receive the dynamic parameter in the incoming request URL in a string variable 'imageId' and also the Model type object
     //Call the getImageByTitle() method in the business logic to fetch all the details of that image
     //Add the image in the Model type object with 'image' as the key
     //Return 'images/image.html' file
@@ -89,21 +89,20 @@ public class ImageController {
 
     //This controller method is called when the request pattern is of type 'editImage'
     //This method fetches the image with the corresponding id from the database and adds it to the model with the key as 'image'
-    //The method then returns 'images/edit.html' file wherein you fill all the updated details of the image
+    //If the user is owner of the image.The method then returns 'images/edit.html' file wherein you fill all the updated details of the image.
+    //Else the method will return an error message that "Only the owner of the image can edit the image"
 
     //The method first needs to convert the list of all the tags to a string containing all the tags separated by a comma and then add this string in a Model type object
     //This string is then displayed by 'edit.html' file as previous tags of an image
     @RequestMapping(value = "/editImage")
     public String editImage(@RequestParam("imageId") Integer imageId,HttpSession session, Model model) {
         User user = (User) session.getAttribute("loggeduser");
-        System.out.println("*********888888888");
         System.out.println(user.getUsername());
         String existingUser = user.getUsername();
         Image image = imageService.getImage(imageId);
         User imageCreater = image.getUser();
         String user1 = imageCreater.getUsername();
         System.out.println(user1);
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         if (existingUser.equals(user1)) {
             String tags = convertTagsToString(image.getTags());
             model.addAttribute("image", image);
