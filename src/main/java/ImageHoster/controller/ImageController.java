@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
+import java.lang.String;
 
 @Controller
 public class ImageController {
@@ -93,13 +94,30 @@ public class ImageController {
     //The method first needs to convert the list of all the tags to a string containing all the tags separated by a comma and then add this string in a Model type object
     //This string is then displayed by 'edit.html' file as previous tags of an image
     @RequestMapping(value = "/editImage")
-    public String editImage(@RequestParam("imageId") Integer imageId, Model model) {
+    public String editImage(@RequestParam("imageId") Integer imageId,HttpSession session, Model model) {
+        User user = (User) session.getAttribute("loggeduser");
+        System.out.println("*********888888888");
+        System.out.println(user.getUsername());
+        String existingUser = user.getUsername();
         Image image = imageService.getImage(imageId);
+        User imageCreater = image.getUser();
+        String user1 = imageCreater.getUsername();
+        System.out.println(user1);
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        if (existingUser.equals(user1)) {
+            String tags = convertTagsToString(image.getTags());
+            model.addAttribute("image", image);
+            model.addAttribute("tags", tags);
+            return "images/edit";
 
-        String tags = convertTagsToString(image.getTags());
-        model.addAttribute("image", image);
-        model.addAttribute("tags", tags);
-        return "images/edit";
+        }
+        else{
+            String error = "Only the owner of the image can edit the image";
+            model.addAttribute("image", image);
+            model.addAttribute("editError", error);
+            return "images/image";
+
+        }
     }
 
     //This controller method is called when the request pattern is of type 'images/edit' and also the incoming request is of PUT type
