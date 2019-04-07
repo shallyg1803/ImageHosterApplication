@@ -52,6 +52,7 @@ public class ImageController {
         model.addAttribute("image", image);
         model.addAttribute("tags", image.getTitle());
         model.addAttribute("tags", image.getTags());
+//        model.addAttribute("comments", image.getText());
         return "images/image";
     }
 
@@ -111,6 +112,7 @@ public class ImageController {
         else{
             String error = "Only the owner of the image can edit the image";
             model.addAttribute("image", image);
+//            model.addAttribute("comments", image.getText());
             model.addAttribute("editError", error);
             return "images/image";
 
@@ -171,6 +173,7 @@ public class ImageController {
             String error = "Only the owner of the image can delete the image";
             model.addAttribute("image", image);
             model.addAttribute("deleteError", error);
+//           model.addAttribute("comments", image.getText());
             return "images/image";
 
 
